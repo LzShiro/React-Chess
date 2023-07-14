@@ -10,10 +10,10 @@ const Game: React.FC = () => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          navigation.navigate('Loading' as never);
+          navigation.navigate('Login' as never);
         }}
       >
-        <Text style={styles.buttonText}>Navigate to Loading</Text>
+        <Text style={styles.buttonText}>Navigate to Login</Text>
       </TouchableOpacity>
     </View>
   );

@@ -13,9 +13,17 @@ const MainStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="Game" component={Game} />
-        <Stack.Screen name="Loading" component={Loading} />
+        <Stack.Screen
+          name="Loading"
+          component={Loading}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Stats" component={Stats} />
       </Stack.Navigator>

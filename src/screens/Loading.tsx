@@ -1,56 +1,54 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, ActivityIndicator, StyleSheet, Image } from 'react-native';
 
 const Loading: React.FC = () => {
   const navigation = useNavigation();
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      navigation.navigate('Game' as never);
+    }, 2000);
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
-    <View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          navigation.navigate('Login' as never);
-        }}
-      >
-        <Text style={styles.buttonText}>Navigate to Login</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          navigation.navigate('Signup' as never);
-        }}
-      >
-        <Text style={styles.buttonText}>Navigate to Signup</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          navigation.navigate('Stats' as never);
-        }}
-      >
-        <Text style={styles.buttonText}>Navigate to Stats</Text>
-      </TouchableOpacity>
+    <View style={styles.container}>
+      <Image
+        source={require('../../assets/Pawn.png')}
+        style={[styles.pawnImage, styles.shadow]}
+      />
+      <Text style={styles.text}>Loading...</Text>
+      <ActivityIndicator size="large" color="black" />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: 'black',
-    marginBotton: 10,
-    paddingVertical: 10,
-    alignItems: 'center',
+  container: {
+    flex: 1,
     justifyContent: 'center',
-    borderRadius: 5,
-    opacity: 1,
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    lineHeight: 21,
+  text: {
+    marginBottom: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    opacity: 1,
-    letterSpacing: 0.25,
+  },
+  pawnImage: {
+    width: 400,
+    height: 400,
+    marginTop: 30,
+    marginBottom: 30,
+  },
+  shadow: {
+    shadowColor: 'black',
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
   },
 });
 
