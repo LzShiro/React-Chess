@@ -6,7 +6,7 @@ const Loading: React.FC = () => {
   const navigation = useNavigation();
   useEffect(() => {
     const timeout = setTimeout(() => {
-      navigation.navigate('Game' as never);
+      navigation.navigate('Stats' as never);
     }, 2000);
     return () => clearTimeout(timeout);
   }, []);

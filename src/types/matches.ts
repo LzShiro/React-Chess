@@ -1,6 +1,6 @@
 export type DataType = {
   id: number;
-  image: number;
   title: string;
+  image: number;
   outcome: string;
 };

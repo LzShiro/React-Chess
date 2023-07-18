@@ -21,7 +21,7 @@ const MainStack = () => {
         <Stack.Screen
           name="Game"
           component={Game}
-          options={{ headerShown: false }}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
           name="Loading"
@@ -29,7 +29,11 @@ const MainStack = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="Stats" component={Stats} />
+        <Stack.Screen
+          name="Stats"
+          component={Stats}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
