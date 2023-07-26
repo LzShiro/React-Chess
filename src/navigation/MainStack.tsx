@@ -21,7 +21,7 @@ const MainStack = () => {
         <Stack.Screen
           name="Game"
           component={Game}
-          options={{ headerShown: true }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Loading"

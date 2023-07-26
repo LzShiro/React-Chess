@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { DataType } from '../types/matches';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -34,7 +34,7 @@ const getResultData = (outcome: string) => {
   return { resultImage, resultText, resultColor };
 };
 
-const Stats: React.FC = () => {
+const Stats = ({ navigation }: { navigation: any }) => {
   const data: DataType[] = [
     {
       id: 1,
@@ -91,7 +91,11 @@ const Stats: React.FC = () => {
       outcome: 'win',
     },
   ];
-  const navigation = useNavigation();
+
+  const handleTimerDurationTime = (duration: number) => {
+    navigation.navigate('Game', { timerDuration: duration });
+  };
+
   const renderItem = ({ item }: { item: DataType }) => (
     <View
       style={[
@@ -112,6 +116,7 @@ const Stats: React.FC = () => {
       />
     </View>
   );
+
   return (
     <View style={styles.container}>
       <View style={styles.topContentContainer}>
@@ -131,7 +136,7 @@ const Stats: React.FC = () => {
         >
           <TouchableOpacity
             style={styles.gameModesItem}
-            onPress={() => Alert.alert('rapid')}
+            onPress={() => handleTimerDurationTime(600)}
           >
             <Text style={[styles.gamesModeItemText, styles.shadow]}>Rapid</Text>
             <Image
@@ -141,7 +146,7 @@ const Stats: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.gameModesItem}
-            onPress={() => Alert.alert('Blitz')}
+            onPress={() => handleTimerDurationTime(180)}
           >
             <Text style={[styles.gamesModeItemText, styles.shadow]}>Blitz</Text>
             <Image
@@ -151,7 +156,7 @@ const Stats: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.gameModesItem}
-            onPress={() => Alert.alert('Bullet')}
+            onPress={() => handleTimerDurationTime(60)}
           >
             <Text style={[styles.gamesModeItemText, styles.shadow]}>
               Bullet
@@ -229,6 +234,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 30,
     marginBottom: 30,
+    backgroundColor: 'white',
   },
   textContainer: {
     marginLeft: 10,

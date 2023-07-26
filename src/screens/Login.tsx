@@ -12,8 +12,7 @@ import {
   Pressable,
 } from 'react-native';
 
-const Login: React.FC = () => {
-  const navigation = useNavigation();
+const Login = ({ navigation }: { navigation: any }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -153,6 +152,7 @@ const styles = StyleSheet.create({
   centerContent: {
     alignItems: 'center',
     marginBottom: 20,
+    backgroundColor: 'white',
   },
   pawnImage: {
     width: 170,

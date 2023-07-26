@@ -1,9 +1,7 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, Image } from 'react-native';
 
-const Loading: React.FC = () => {
-  const navigation = useNavigation();
+const Loading = ({ navigation }: { navigation: any }) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       navigation.navigate('Stats' as never);
