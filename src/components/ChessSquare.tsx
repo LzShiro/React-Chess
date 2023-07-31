@@ -1,15 +1,17 @@
 import React from 'react';
 import { TouchableOpacity, View, StyleSheet, Text, Image } from 'react-native';
 import { ChessPiece } from '../types/ChessboardData';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 interface ChessSquareProps {
   color: 'white' | 'black';
   piece?: ChessPiece;
   onPress?: () => void;
+  isValidMove?: boolean;
 }
 
 const ChessSquare: React.FC<ChessSquareProps> = ({ color, piece, onPress }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableHighlight onPress={onPress}>
       <View
         style={[
           styles.square,
@@ -77,7 +79,7 @@ const ChessSquare: React.FC<ChessSquareProps> = ({ color, piece, onPress }) => {
           />
         )}
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 };
 

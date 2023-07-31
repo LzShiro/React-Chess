@@ -4,6 +4,8 @@ import ChessSquare from './ChessSquare';
 import {
   ChessboardData,
   ChessSquare as SquareType,
+  ChessPiece,
+  PieceType,
 } from '../types/ChessboardData';
 
 interface ChessboardProps {
@@ -14,24 +16,12 @@ interface Position {
   col: number;
 }
 
-export enum PieceType {
-  Pawn = 'pawn',
-  Rook = 'rook',
-  Knight = 'knight',
-  Bishop = 'bishop',
-  Queen = 'queen',
-  King = 'king',
-}
-
 enum PlayerColor {
   White = 'white',
   Black = 'black',
 }
 
-interface ChessPiece {
-  type: PieceType;
-  color: PlayerColor;
-}
+
 
 const isValidPosition = (position: Position): boolean => {
   const { row, col } = position;
@@ -40,7 +30,7 @@ const isValidPosition = (position: Position): boolean => {
 
 export const getValidPawnMoves = (
   selectedPiece: ChessPiece,
-  position: Position
+  position: Position,
 ) => {
   const validMoves: Position[] = [];
 
@@ -84,32 +74,36 @@ export const getValidPawnMoves = (
 };
 
 const Chessboard: React.FC<ChessboardProps> = ({ data }) => {
+  const [boardData, setBoardData] = useState(data);
+  const [validMoves, setValidMoves] = useState<Position[]>([]);
+
   const handleSquarePress = (row: number, col: number) => {
-    console.log(`Clic en la casilla ${row}, ${col}`);
+    const piece = data.squares[row][col].piece;
+    if (piece){
+      const moves = getValidPawnMoves(piece, {row,col});
+      setValidMoves(moves)
+      handlePieceMove ({row,col})
+    } else {
+      console.log('La casilla no tiene pieza.');
+      setValidMoves([]);
+    }
   };
   const handlePieceMove = (
-    piecePosition: Position,
-    targetPosition: Position
+    piecePosition: Position
   ) => {
-    const [boardData, setBoardData] = useState(data);
     const selectedPiece =
       boardData.squares[piecePosition.row][piecePosition.col].piece;
 
     // Verificar si la pieza puede moverse a la posición de destino
     if (selectedPiece) {
-      let isValidMove = false;
       switch (selectedPiece.type) {
         case PieceType.Pawn:
           // Llamar a la función para obtener los movimientos válidos para el peón
           const validPawnMoves = getValidPawnMoves(
-            selectedPiece as ChessPiece & { type: PieceType },
+            selectedPiece,
             piecePosition
           );
-          // Verificar si la posición de destino está en los movimientos válidos del peón
-          isValidMove = validPawnMoves.some(
-            (move) =>
-              move.row === targetPosition.row && move.col === targetPosition.col
-          );
+          console.log('Movimientos válidos: ',validPawnMoves)
           break;
         case PieceType.Rook:
           // Llamar a la función para obtener los movimientos válidos para la torre
@@ -119,15 +113,6 @@ const Chessboard: React.FC<ChessboardProps> = ({ data }) => {
         // Agregar otros casos para los demás tipos de piezas
         default:
           break;
-      }
-
-      // Si el movimiento es válido, actualizar el estado del tablero con la nueva posición de la pieza
-      if (isValidMove) {
-        const updatedSquares = [...boardData.squares];
-        updatedSquares[piecePosition.row][piecePosition.col].piece = undefined;
-        updatedSquares[targetPosition.row][targetPosition.col].piece =
-          selectedPiece;
-        setBoardData({ ...boardData, squares: updatedSquares });
       }
     }
   };

@@ -9,7 +9,16 @@ export interface ChessSquare {
   piece?: ChessPiece;
 }
 
+
+export enum PieceType {
+  Pawn = 'pawn',
+  Rook = 'rook',
+  Knight = 'knight',
+  Bishop = 'bishop',
+  Queen = 'queen',
+  King = 'king',
+}
 export interface ChessPiece {
-  type: 'pawn' | 'rook' | 'knight' | 'bishop' | 'queen' | 'king';
+  type: PieceType;
   color: 'white' | 'black';
 }
