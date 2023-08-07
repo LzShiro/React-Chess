@@ -21,14 +21,20 @@ const ChessSquare: React.FC<ChessSquareProps> = ({
   isValidMove,
 }) => {
   return (
-    <TouchableHighlight onPress={onPress}>
+    <TouchableHighlight style={[
+      styles.square,
+      color === 'white' ? styles.lightSquare : styles.darkSquare,
+    ]}
+    underlayColor="transparent"
+    onPress={onPress}
+  >
       <View
-        style={[
-          styles.square,
+      style={[
+        styles.square,
           color === 'white' ? styles.lightSquare : styles.darkSquare,
-          isValidMove && styles.validMove,
-        ]}
-      >
+          isValidMove && styles.validMoveIndicator,
+      ]}>
+      
         {piece && piece.type === 'pawn' && (
           <Image
             source={
@@ -89,7 +95,7 @@ const ChessSquare: React.FC<ChessSquareProps> = ({
             style={{ width: 50, height: 50 }}
           />
         )}
-      </View>
+        </View>
     </TouchableHighlight>
   );
 };
@@ -98,7 +104,16 @@ const styles = StyleSheet.create({
   square: { width: 50, height: 50 },
   lightSquare: { backgroundColor: '#CCCCCC' },
   darkSquare: { backgroundColor: '#039300' },
-  validMove: { backgroundColor: 'gray' },
+  validMoveIndicator:{
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    backgroundColor: '#5A5A5A',
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    transform: [{translateX: -5},{translateY: -5}],
+  },
 });
 
 export default ChessSquare;

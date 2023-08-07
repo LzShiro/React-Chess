@@ -34,7 +34,7 @@ const getValidPawnMoves = (
   const validMoves: Position[] = [];
 
   const { row, col } = position;
-  const colorMultiplier = selectedPiece.color === 'white' ? 1 : -1;
+  const colorMultiplier = selectedPiece.color === 'white' ? -1 : 1;
 
   // Movimiento básico de avance del peón
   const forwardMove: Position = {
@@ -55,11 +55,11 @@ const getValidPawnMoves = (
     };
     if (
       (selectedPiece.color === 'white' &&
-        row === 1 &&
+        row === 6 &&
         !boardData.squares[doubleForwardMove.row][doubleForwardMove.col]
           .piece) ||
       (selectedPiece.color === 'black' &&
-        row === 6 &&
+        row === 1 &&
         !boardData.squares[doubleForwardMove.row][doubleForwardMove.col].piece)
     ) {
       validMoves.push(doubleForwardMove);
@@ -96,7 +96,7 @@ const getValidPawnMoves = (
   ) {
     validMoves.push(captureRightMove);
   }
-  console.log(`Clic en la casilla ${row}, ${col}`);
+  console.log(`Clic en la casilla ${row} row, ${col} col`);
   console.log('Movimientos válidos: ', validMoves);
   return validMoves;
 };
