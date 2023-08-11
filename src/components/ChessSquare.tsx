@@ -25,15 +25,11 @@ const ChessSquare: React.FC<ChessSquareProps> = ({
       styles.square,
       color === 'white' ? styles.lightSquare : styles.darkSquare,
     ]}
-    underlayColor="transparent"
+    underlayColor="yellow"
     onPress={onPress}
   >
-      <View
-      style={[
-        styles.square,
-          color === 'white' ? styles.lightSquare : styles.darkSquare,
-          isValidMove && styles.validMoveIndicator,
-      ]}>
+      <View style={styles.squareContent}>
+        {isValidMove && <View style={styles.validMoveIndicator} />}
       
         {piece && piece.type === 'pawn' && (
           <Image
@@ -42,7 +38,7 @@ const ChessSquare: React.FC<ChessSquareProps> = ({
                 ? require('../../assets/pieces/white_pawn.png')
                 : require('../../assets/pieces/black_pawn.png')
             }
-            style={{ width: 50, height: 50 }}
+            style={styles.pieceImage}
           />
         )}
         {piece && piece.type === 'rook' && (
@@ -52,7 +48,7 @@ const ChessSquare: React.FC<ChessSquareProps> = ({
                 ? require('../../assets/pieces/white_rook.png')
                 : require('../../assets/pieces/black_rook.png')
             }
-            style={{ width: 50, height: 50 }}
+            style={styles.pieceImage}
           />
         )}
         {piece && piece.type === 'knight' && (
@@ -62,7 +58,7 @@ const ChessSquare: React.FC<ChessSquareProps> = ({
                 ? require('../../assets/pieces/white_knight.png')
                 : require('../../assets/pieces/black_knight.png')
             }
-            style={{ width: 50, height: 50 }}
+            style={styles.pieceImage}
           />
         )}
         {piece && piece.type === 'bishop' && (
@@ -72,7 +68,7 @@ const ChessSquare: React.FC<ChessSquareProps> = ({
                 ? require('../../assets/pieces/white_bishop.png')
                 : require('../../assets/pieces/black_bishop.png')
             }
-            style={{ width: 50, height: 50 }}
+            style={styles.pieceImage}
           />
         )}
         {piece && piece.type === 'queen' && (
@@ -82,7 +78,7 @@ const ChessSquare: React.FC<ChessSquareProps> = ({
                 ? require('../../assets/pieces/white_queen.png')
                 : require('../../assets/pieces/black_queen.png')
             }
-            style={{ width: 50, height: 50 }}
+            style={styles.pieceImage}
           />
         )}
         {piece && piece.type === 'king' && (
@@ -92,7 +88,7 @@ const ChessSquare: React.FC<ChessSquareProps> = ({
                 ? require('../../assets/pieces/white_king.png')
                 : require('../../assets/pieces/black_king.png')
             }
-            style={{ width: 50, height: 50 }}
+            style={styles.pieceImage}
           />
         )}
         </View>
@@ -104,16 +100,22 @@ const styles = StyleSheet.create({
   square: { width: 50, height: 50 },
   lightSquare: { backgroundColor: '#CCCCCC' },
   darkSquare: { backgroundColor: '#039300' },
+  squareContent: {position: 'relative'},
   validMoveIndicator:{
     position: 'absolute',
-    top: '50%',
-    left: '50%',
+    top: 25,
+    left: 25,
     backgroundColor: '#5A5A5A',
     width: 10,
     height: 10,
     borderRadius: 5,
     transform: [{translateX: -5},{translateY: -5}],
+    zIndex: 1,
   },
+  pieceImage: {
+    width: '100%',
+    height: '100%',
+  }
 });
 
 export default ChessSquare;

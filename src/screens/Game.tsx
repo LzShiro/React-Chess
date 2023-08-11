@@ -14,12 +14,12 @@ import {
   ChessboardData,
   ChessPiece,
   ChessSquare,
+  PieceType,
 } from '../types/ChessboardData';
 
 const Game = (props: { route: { params: { timerDuration: number } } }) => {
   const navigation = useNavigation();
   const timerDuration = props.route.params.timerDuration;
-  const [time, setTime] = useState(timerDuration);
   const generateInitialBoardData = (): ChessboardData => {
     //column = letters
     //row = numbers
@@ -33,13 +33,13 @@ const Game = (props: { route: { params: { timerDuration: number } } }) => {
         switch (row) {
           case 1:
             piece = {
-              type: 'pawn',
+              type: PieceType.Pawn,
               color: 'black',
             };
             break;
           case 6:
             piece = {
-              type: 'pawn',
+              type: PieceType.Pawn,
               color: 'white',
             };
             break;
@@ -48,33 +48,33 @@ const Game = (props: { route: { params: { timerDuration: number } } }) => {
               case 0:
               case 7:
                 piece = {
-                  type: 'rook',
+                  type: PieceType.Rook,
                   color: 'black',
                 };
                 break;
               case 1:
               case 6:
                 piece = {
-                  type: 'knight',
+                  type: PieceType.Knight,
                   color: 'black',
                 };
                 break;
               case 2:
               case 5:
                 piece = {
-                  type: 'bishop',
+                  type: PieceType.Bishop,
                   color: 'black',
                 };
                 break;
               case 3:
                 piece = {
-                  type: 'queen',
+                  type: PieceType.Queen,
                   color: 'black',
                 };
                 break;
               case 4:
                 piece = {
-                  type: 'king',
+                  type: PieceType.King,
                   color: 'black',
                 };
                 break;
@@ -87,33 +87,33 @@ const Game = (props: { route: { params: { timerDuration: number } } }) => {
               case 0:
               case 7:
                 piece = {
-                  type: 'rook',
+                  type: PieceType.Rook,
                   color: 'white',
                 };
                 break;
               case 1:
               case 6:
                 piece = {
-                  type: 'knight',
+                  type: PieceType.Knight,
                   color: 'white',
                 };
                 break;
               case 2:
               case 5:
                 piece = {
-                  type: 'bishop',
+                  type: PieceType.Bishop,
                   color: 'white',
                 };
                 break;
               case 3:
                 piece = {
-                  type: 'queen',
+                  type: PieceType.Queen,
                   color: 'white',
                 };
                 break;
               case 4:
                 piece = {
-                  type: 'king',
+                  type: PieceType.King,
                   color: 'white',
                 };
                 break;
@@ -139,14 +139,7 @@ const Game = (props: { route: { params: { timerDuration: number } } }) => {
     };
   };
   const boardData: ChessboardData = generateInitialBoardData();
-  useEffect(() => {
-    if (time > 0) {
-      const timer = setTimeout(() => {
-        setTime((prevTime) => prevTime - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [time]);
+  
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -157,9 +150,7 @@ const Game = (props: { route: { params: { timerDuration: number } } }) => {
       >
         <Text style={styles.prueba}>Go back to Stats</Text>
       </TouchableOpacity>
-      <Text style={styles.prueba}>{time}</Text>
-      <Chessboard data={boardData} />
-      <Text style={styles.prueba}>{time}</Text>
+      <Chessboard data={boardData} timerDuration={timerDuration} />
     </View>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import ChessSquare from './ChessSquare';
 import {
   ChessboardData,
@@ -10,6 +10,7 @@ import {
 
 interface ChessboardProps {
   data: ChessboardData;
+  timerDuration:  number;
 }
 interface Position {
   row: number;
@@ -54,15 +55,15 @@ const getValidPawnMoves = (
       col,
     };
     if (
-      (selectedPiece.color === 'white' &&
-        row === 6 &&
-        !boardData.squares[doubleForwardMove.row][doubleForwardMove.col]
-          .piece) ||
-      (selectedPiece.color === 'black' &&
-        row === 1 &&
-        !boardData.squares[doubleForwardMove.row][doubleForwardMove.col].piece)
+      (selectedPiece.color === 'white' && row === 6 ) ||
+      (selectedPiece.color === 'black' && row === 1 )
     ) {
-      validMoves.push(doubleForwardMove);
+      if (
+        isValidPosition(doubleForwardMove) &&
+        !boardData.squares[doubleForwardMove.row][doubleForwardMove.col].piece
+      ) {
+        validMoves.push(doubleForwardMove);
+      }
     }
   }
   // Movimiento de captura diagonal izquierda del peón
@@ -96,31 +97,36 @@ const getValidPawnMoves = (
   ) {
     validMoves.push(captureRightMove);
   }
+  // Agregar siempre los movimientos válidos del peón, incluso si no hay movimientos posibles
   console.log(`Clic en la casilla ${row} row, ${col} col`);
   console.log('Movimientos válidos: ', validMoves);
   return validMoves;
 };
 
-const Chessboard: React.FC<ChessboardProps> = ({ data }) => {
+
+
+
+const Chessboard: React.FC<ChessboardProps & { timerDuration: number }> = ({ data, timerDuration }) => {
   const [boardData, setBoardData] = useState(data);
   const [validMoves, setValidMoves] = useState<Position[]>([]);
-  const [hasValidMove, setHasValidMove] = useState(false);
+  const [selectedPiecePosition, setSelectedPiecePosition] = useState<Position | null>(null);
+  const [isWhiteTurn, setIsWhiteTurn] = useState(true);
+  const [time, setTime] = useState(timerDuration)
 
   // Actualizar el estado de boardData cuando data cambie
   useEffect(() => {
-    setBoardData(data);
-  }, [data]);
-
-  const handleSquarePress = (row: number, col: number) => {
-    const piece = boardData.squares[row][col].piece;
-    if (piece) {
-      handlePieceMove({ row, col });
-    } else {
-      console.log('La casilla no tiene pieza.');
-      setValidMoves([]);
-      setHasValidMove(false);
+    //Crear una nueva copia de data
+    const newBoardData = {...data};
+    //Actualizar el estado con la nueva copia de data
+    setBoardData(newBoardData);
+    if (time > 0) {
+      const timer = setTimeout(() => {
+        setTime((prevTime) => prevTime - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
     }
-  };
+  }, [data, time]);
+
   const handlePieceMove = (piecePosition: Position) => {
     const selectedPiece =
       boardData.squares[piecePosition.row][piecePosition.col].piece;
@@ -130,14 +136,10 @@ const Chessboard: React.FC<ChessboardProps> = ({ data }) => {
       switch (selectedPiece.type) {
         case PieceType.Pawn:
           // Llamar a la función para obtener los movimientos válidos para el peón
-          const moves = getValidPawnMoves(
-            selectedPiece,
-            piecePosition,
-            boardData
-          );
+          const moves = getValidPawnMoves(selectedPiece, piecePosition, boardData);
           console.log('Movimientos válidos: ', moves);
           setValidMoves(moves);
-          setHasValidMove(true);
+          setSelectedPiecePosition(piecePosition);
           break;
         case PieceType.Rook:
           // Llamar a la función para obtener los movimientos válidos para la torre
@@ -150,9 +152,26 @@ const Chessboard: React.FC<ChessboardProps> = ({ data }) => {
       }
     }
   };
+  const handleMovePiece = (destination: Position) => {
+    //Verificar si la posicion de destino está en los movimientos válidos
+    const isValidMove = validMoves.some((move) => move.row === destination.row && move.col === destination.col);
+    if (isValidMove && selectedPiecePosition){
+      const newBoardData = {...boardData};
+      const {row, col} = selectedPiecePosition;
+      const pieceToMove = newBoardData.squares[row][col].piece;
+      // Actualizar la posición de la pieza en el tablero
+      newBoardData.squares[row][col].piece = undefined;
+      newBoardData.squares[destination.row][destination.col].piece = pieceToMove;
+
+      setBoardData(newBoardData);
+      setValidMoves([]);
+      setSelectedPiecePosition(null);
+    }
+  };
 
   return (
     <View>
+      <Text style={styles.timer}>{time}</Text>
       {data.squares.map((row, rowIndex) => (
         <View key={rowIndex} style={styles.row}>
           {row.map((square: SquareType, colIndex: number) => {
@@ -168,18 +187,29 @@ const Chessboard: React.FC<ChessboardProps> = ({ data }) => {
                 color={square.color}
                 piece={piece}
                 isValidMove={isMoveValid}
-                onPress={() => handleSquarePress(rowIndex, colIndex)}
+                onPress={() => {if (selectedPiecePosition){handleMovePiece(position);
+                } else {
+                  handlePieceMove(position);
+                }
+              }}
               />
             );
           })}
-        </View>
+        </View>  
       ))}
+      <Text style={styles.timer}>{time}</Text>
+
     </View>
   );
 };
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
+  },
+  timer: {
+    color: 'black',
+    fontSize: 32,
+    marginBottom: 10,
   },
 });
 
