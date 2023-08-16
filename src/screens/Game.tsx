@@ -1,14 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Alert,
-  StyleSheet,
-  Image,
-} from 'react-native';
-import GameProps from '../types/GameProps';
-import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import Chessboard from '../components/Chessboard';
 import {
   ChessboardData,
@@ -17,7 +9,7 @@ import {
   PieceType,
 } from '../types/ChessboardData';
 
-const Game = (props: { route: { params: { timerDuration: number } } }) => {
+const Game = (props: {route: {params: {timerDuration: number}}}) => {
   const navigation = useNavigation();
   const timerDuration = props.route.params.timerDuration;
   const generateInitialBoardData = (): ChessboardData => {
@@ -139,15 +131,14 @@ const Game = (props: { route: { params: { timerDuration: number } } }) => {
     };
   };
   const boardData: ChessboardData = generateInitialBoardData();
-  
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.signUpButton}
         onPress={() => {
           navigation.navigate('Stats' as never);
-        }}
-      >
+        }}>
         <Text style={styles.prueba}>Go back to Stats</Text>
       </TouchableOpacity>
       <Chessboard data={boardData} timerDuration={timerDuration} />
