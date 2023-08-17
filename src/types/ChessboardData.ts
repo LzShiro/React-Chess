@@ -1,3 +1,5 @@
+import { PlayerColor } from "../components/gameState";
+
 export interface ChessboardData {
   rows: number;
   cols: number;
@@ -21,4 +23,12 @@ export enum PieceType {
 export interface ChessPiece {
   type: PieceType;
   color: 'white' | 'black';
+}
+export interface TimerProps {
+  onTimeEnd: () => void;
+}
+
+export interface TimerState {
+  whiteTime: number;
+  blackTime: number;
 }

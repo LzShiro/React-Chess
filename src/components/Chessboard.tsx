@@ -7,19 +7,16 @@ import {
   ChessPiece,
   PieceType,
 } from '../types/ChessboardData';
+import { turnAtom, PlayerColor } from './gameState';
+import { useAtom } from 'jotai';
+import Timer from './Timer';
 
 interface ChessboardProps {
   data: ChessboardData;
-  timerDuration:  number;
 }
 interface Position {
   row: number;
   col: number;
-}
-
-enum PlayerColor {
-  White = 'white',
-  Black = 'black',
 }
 
 const isValidPosition = (position: Position): boolean => {
@@ -55,8 +52,8 @@ const getValidPawnMoves = (
       col,
     };
     if (
-      (selectedPiece.color === 'white' && row === 6 ) ||
-      (selectedPiece.color === 'black' && row === 1 )
+      (selectedPiece.color === 'white' && row === 6) ||
+      (selectedPiece.color === 'black' && row === 1)
     ) {
       if (
         isValidPosition(doubleForwardMove) &&
@@ -98,48 +95,45 @@ const getValidPawnMoves = (
     validMoves.push(captureRightMove);
   }
   // Agregar siempre los movimientos válidos del peón, incluso si no hay movimientos posibles
-  console.log(`Clic en la casilla ${row} row, ${col} col`);
-  console.log('Movimientos válidos: ', validMoves);
   return validMoves;
 };
 
-
-
-
-const Chessboard: React.FC<ChessboardProps & { timerDuration: number }> = ({ data, timerDuration }) => {
+const Chessboard: React.FC<ChessboardProps> = ({ data }) => {
   const [boardData, setBoardData] = useState(data);
   const [validMoves, setValidMoves] = useState<Position[]>([]);
-  const [selectedPiecePosition, setSelectedPiecePosition] = useState<Position | null>(null);
-  const [isWhiteTurn, setIsWhiteTurn] = useState(true);
-  const [time, setTime] = useState(timerDuration)
+  const [selectedPiecePosition, setSelectedPiecePosition] =
+    useState<Position | null>(null);
+  const [isTimerRunning, setIsTimerRunning] = useState(true);
+
+  //Timer State
+  const [turn, setTurn] = useAtom(turnAtom);
+  const [isWhiteTurn, setIsWhiteTurn] = useState<boolean>(true);
 
   // Actualizar el estado de boardData cuando data cambie
   useEffect(() => {
     //Crear una nueva copia de data
-    const newBoardData = {...data};
+    const newBoardData = { ...data };
     //Actualizar el estado con la nueva copia de data
     setBoardData(newBoardData);
-    if (time > 0) {
-      const timer = setTimeout(() => {
-        setTime((prevTime) => prevTime - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [data, time]);
+  }, [data]);
 
   const handlePieceMove = (piecePosition: Position) => {
     const selectedPiece =
       boardData.squares[piecePosition.row][piecePosition.col].piece;
 
     // Verificar si la pieza puede moverse a la posición de destino
-    if (selectedPiece) {
+    if (selectedPiece && selectedPiece.color === turn) {
       switch (selectedPiece.type) {
         case PieceType.Pawn:
           // Llamar a la función para obtener los movimientos válidos para el peón
-          const moves = getValidPawnMoves(selectedPiece, piecePosition, boardData);
-          console.log('Movimientos válidos: ', moves);
+          const moves = getValidPawnMoves(
+            selectedPiece,
+            piecePosition,
+            boardData
+          );
           setValidMoves(moves);
           setSelectedPiecePosition(piecePosition);
+          toggleTurn();
           break;
         case PieceType.Rook:
           // Llamar a la función para obtener los movimientos válidos para la torre
@@ -152,16 +146,22 @@ const Chessboard: React.FC<ChessboardProps & { timerDuration: number }> = ({ dat
       }
     }
   };
+  const toggleTurn = () => {
+    setTurn(turn === PlayerColor.White ? PlayerColor.Black : PlayerColor.White);
+  };
   const handleMovePiece = (destination: Position) => {
     //Verificar si la posicion de destino está en los movimientos válidos
-    const isValidMove = validMoves.some((move) => move.row === destination.row && move.col === destination.col);
-    if (isValidMove && selectedPiecePosition){
-      const newBoardData = {...boardData};
-      const {row, col} = selectedPiecePosition;
+    const isValidMove = validMoves.some(
+      (move) => move.row === destination.row && move.col === destination.col
+    );
+    if (isValidMove && selectedPiecePosition) {
+      const newBoardData = { ...boardData };
+      const { row, col } = selectedPiecePosition;
       const pieceToMove = newBoardData.squares[row][col].piece;
       // Actualizar la posición de la pieza en el tablero
       newBoardData.squares[row][col].piece = undefined;
-      newBoardData.squares[destination.row][destination.col].piece = pieceToMove;
+      newBoardData.squares[destination.row][destination.col].piece =
+        pieceToMove;
 
       setBoardData(newBoardData);
       setValidMoves([]);
@@ -171,7 +171,15 @@ const Chessboard: React.FC<ChessboardProps & { timerDuration: number }> = ({ dat
 
   return (
     <View>
-      <Text style={styles.timer}>{time}</Text>
+      {turn ? (
+        <>
+          <Timer onTimeEnd={toggleTurn} />
+        </>
+      ) : (
+        <>
+          <Timer onTimeEnd={toggleTurn} />
+        </>
+      )}
       {data.squares.map((row, rowIndex) => (
         <View key={rowIndex} style={styles.row}>
           {row.map((square: SquareType, colIndex: number) => {
@@ -187,18 +195,28 @@ const Chessboard: React.FC<ChessboardProps & { timerDuration: number }> = ({ dat
                 color={square.color}
                 piece={piece}
                 isValidMove={isMoveValid}
-                onPress={() => {if (selectedPiecePosition){handleMovePiece(position);
-                } else {
-                  handlePieceMove(position);
-                }
-              }}
+                onPress={() => {
+                  if (selectedPiecePosition) {
+                    handleMovePiece(position);
+                  } else {
+                    handlePieceMove(position);
+                  }
+                }}
               />
             );
           })}
-        </View>  
+        </View>
       ))}
-      <Text style={styles.timer}>{time}</Text>
-
+      {turn ? (
+        <>
+          <Timer onTimeEnd={toggleTurn} />
+        </>
+      ) : (
+        <>
+          <Timer onTimeEnd={toggleTurn} />
+        </>
+      )}
+      <Text style={styles.timer}>Turn: {turn}</Text>
     </View>
   );
 };
@@ -210,6 +228,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 32,
     marginBottom: 10,
+    marginLeft: 10,
   },
 });
 

@@ -17,9 +17,8 @@ import {
   PieceType,
 } from '../types/ChessboardData';
 
-const Game = (props: { route: { params: { timerDuration: number } } }) => {
+const Game: React.FC = () => {
   const navigation = useNavigation();
-  const timerDuration = props.route.params.timerDuration;
   const generateInitialBoardData = (): ChessboardData => {
     //column = letters
     //row = numbers
@@ -139,7 +138,7 @@ const Game = (props: { route: { params: { timerDuration: number } } }) => {
     };
   };
   const boardData: ChessboardData = generateInitialBoardData();
-  
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -150,7 +149,7 @@ const Game = (props: { route: { params: { timerDuration: number } } }) => {
       >
         <Text style={styles.prueba}>Go back to Stats</Text>
       </TouchableOpacity>
-      <Chessboard data={boardData} timerDuration={timerDuration} />
+      <Chessboard data={boardData} />
     </View>
   );
 };

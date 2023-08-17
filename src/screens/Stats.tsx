@@ -11,6 +11,8 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
+import { whiteTimeAtom, blackTimeAtom } from '../components/gameState';
+import { useAtom } from 'jotai';
 
 const getResultData = (outcome: string) => {
   let resultImage;
@@ -91,9 +93,13 @@ const Stats = ({ navigation }: { navigation: any }) => {
       outcome: 'win',
     },
   ];
+  const [whiteTime, setWhiteTime] = useAtom(whiteTimeAtom);
+  const [blackTime, setBlackTime] = useAtom(blackTimeAtom);
 
   const handleTimerDurationTime = (duration: number) => {
-    navigation.navigate('Game', { timerDuration: duration });
+    setWhiteTime(duration);
+    setBlackTime(duration);
+    navigation.navigate('Game');
   };
 
   const renderItem = ({ item }: { item: DataType }) => (
