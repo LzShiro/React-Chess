@@ -1,5 +1,5 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,9 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
+import {margins, windowWidth} from '../styles';
 
-const Login = ({ navigation }: { navigation: any }) => {
+const Login = ({navigation}: {navigation: any}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -33,15 +34,13 @@ const Login = ({ navigation }: { navigation: any }) => {
         onRequestClose={() => {
           Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
-        }}
-      >
+        }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Invalid username or password</Text>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
+              onPress={() => setModalVisible(!modalVisible)}>
               <Text style={styles.textStyle}>Close</Text>
             </Pressable>
           </View>
@@ -58,19 +57,19 @@ const Login = ({ navigation }: { navigation: any }) => {
         <View style={styles.blankSpace} />
         <View style={styles.grayContainer}>
           <TextInput
-            style={[styles.textInput, styles.shadow, { marginTop: 75 }]}
+            style={[styles.textInput, styles.shadow, {marginTop: 75}]}
             placeholder="Username"
             placeholderTextColor="gray"
             textAlign="left"
-            onChangeText={(newUsername) => setUsername(newUsername)}
+            onChangeText={newUsername => setUsername(newUsername)}
             value={username}
           />
           <TextInput
-            style={[styles.textInput, styles.shadow, { marginTop: 10 }]}
+            style={[styles.textInput, styles.shadow, {marginTop: 10}]}
             placeholder="Password"
             placeholderTextColor="gray"
             secureTextEntry={true}
-            onChangeText={(newPassword) => setPassword(newPassword)}
+            onChangeText={newPassword => setPassword(newPassword)}
             value={password}
           />
           <TouchableOpacity style={[styles.signUpButton, styles.shadow]}>
@@ -78,16 +77,14 @@ const Login = ({ navigation }: { navigation: any }) => {
               style={styles.textSignIn}
               onPress={() => {
                 navigation.navigate('Signup' as never);
-              }}
-            >
+              }}>
               Sign up
             </Text>
           </TouchableOpacity>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={[styles.buttonSignIn, styles.shadow]}
-              onPress={handleLogin}
-            >
+              onPress={handleLogin}>
               <Text style={styles.buttonText}>Log in</Text>
             </TouchableOpacity>
           </View>
@@ -172,9 +169,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignSelf: 'center',
     color: 'black',
-    width: '90%',
-    height: '9%',
-    marginHorizontal: '5%',
+    width: windowWidth - margins.medium * 2,
+    height: 40,
+    marginHorizontal: margins.medium,
   },
   textSignIn: {
     color: '#1B24FF',
