@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, Image } from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Text, ActivityIndicator, StyleSheet, Image} from 'react-native';
 
-const Loading = ({ navigation }: { navigation: any }) => {
+const Loading = ({navigation}: {navigation: any}) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       navigation.navigate('Stats' as never);
     }, 2000);
     return () => clearTimeout(timeout);
-  }, []);
+  }, [navigation]);
 
   return (
     <View style={styles.container}>

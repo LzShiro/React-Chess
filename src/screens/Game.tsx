@@ -1,14 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Alert,
-  StyleSheet,
-  Image,
-} from 'react-native';
-import GameProps from '../types/GameProps';
-import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import Chessboard from '../components/Chessboard';
 import {
   ChessboardData,
@@ -145,8 +137,7 @@ const Game: React.FC = () => {
         style={styles.signUpButton}
         onPress={() => {
           navigation.navigate('Stats' as never);
-        }}
-      >
+        }}>
         <Text style={styles.prueba}>Go back to Stats</Text>
       </TouchableOpacity>
       <Chessboard data={boardData} />
