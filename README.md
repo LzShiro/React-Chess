@@ -8,7 +8,7 @@ Run command ```npm install```  to install dependences and then ```npx expo run``
 
 ## Features
 -- Still working --
-Main idea is to make an app just find a bullet, rapid or blitz game, you can create your account and then find some games. Progress is uploaded to "Master" Branch
+Main idea is to make an app just to find bullet, rapid or blitz game, you can create your account and then find some games. Progress is uploaded to "Master" Branch
 
 ## Technologies
 
