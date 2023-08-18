@@ -4,7 +4,7 @@ Just a Chess using React Native by André Ricoy for practice. Built in React Nat
 
 ## Run Locally
 
-Run command ``` npm install```  to install dependences and then ```npx expo run``` to run your server, then hit 'a' to run the app on Android 
+Run command ```npm install```  to install dependences and then ```npx expo run``` to run your server, then hit 'a' to run the app on Android 
 
 ## Features
 -- Still working --
